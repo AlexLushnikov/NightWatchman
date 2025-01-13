@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Common
+namespace NightWatchman
 {
     public class CompositionRoot : MonoBehaviour
     {
@@ -10,6 +10,11 @@ namespace Common
         private void OnDestroy()
         {
             Composition.Destroy();
+        }
+
+        public static IResourceManager GetResourceManager()
+        {
+            return Composition.GetResourceManager();
         }
     }
 }

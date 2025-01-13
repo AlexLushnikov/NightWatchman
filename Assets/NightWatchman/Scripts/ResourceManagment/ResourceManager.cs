@@ -1,27 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace NightWatchman
 {
-    public class ResourceManager : MonoBehaviour
+    public class ResourceManager : IResourceManager
     {
-        [SerializeField] private List<Prefab> _prefabs;
-        private Dictionary<EPrefabs, GameObject> _spawnedObjects;
+        private PrefabStorage _prefabStorage;
+        private Dictionary<EPrefabs, GameObject> _spawnedObjects = new ();
 
-        // public T GetPrefab<T>(EPrefabs prefab)
-        // {
-        //     if (_spawnedObjects.ContainsKey(prefab))
-        //     {
-        //         
-        //     }
-        // }
-    }
+        public ResourceManager()
+        {
+            _prefabStorage = Resources.Load<PrefabStorage>("NightWatchman/PrefabStorage");
+        }
 
-    [Serializable]
-    public class Prefab
-    {
-        public EPrefabs _prefab;
-        public GameObject _object;
+        public T GetPrefab<T>(EPrefabs ePrefab) where T : Component
+        {
+            if (!_spawnedObjects.TryGetValue(ePrefab, out var go))
+            {
+                var prefab = _prefabStorage.Prefabs.FirstOrDefault(x => x.Object.TryGetComponent<T>(out var component));
+                if (prefab != null)
+                {
+                    go = Object.Instantiate(prefab.Object);
+                    _spawnedObjects.Add(ePrefab, go);
+                }
+                else
+                {
+                    throw new UnityException($"Prefab with type {typeof(T)} not found");
+                }
+            }
+            
+            var component = go.GetComponent(typeof(T));
+            if (component == null)
+            {
+                throw new UnityException($"{typeof(T)} type mismatch");
+            }
+
+            return (T)component;
+        }
     }
 }
