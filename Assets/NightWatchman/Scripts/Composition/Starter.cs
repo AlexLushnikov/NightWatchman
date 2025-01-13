@@ -7,7 +7,7 @@ namespace NightWatchman
         private async void Awake()
         {
             var resourceManager = CompositionRoot.GetResourceManager();
-            resourceManager.GetPrefab<PlayerController>(EPrefabs.Player);
+            var playerController = CompositionRoot.GetPlayerController();
         }
     }
 }

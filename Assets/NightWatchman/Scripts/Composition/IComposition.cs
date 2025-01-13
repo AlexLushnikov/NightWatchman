@@ -4,5 +4,6 @@ namespace NightWatchman
     {
         void Destroy();
         IResourceManager GetResourceManager();
+        IPlayerController GetPlayerController();
     }
 }
