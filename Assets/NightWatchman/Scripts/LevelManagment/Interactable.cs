@@ -9,11 +9,10 @@ namespace NightWatchman
     {
         public EInteractableIds ID => _id;
         public InteractableState State { get; private set; }
-        public Difficulty Difficulty => _difficulty;
+        public Difficulty Difficulty { get; private set; }
 
         public bool IsAnomaly => Difficulty != Difficulty.None;
-
-        [SerializeField] private Difficulty _difficulty;
+        
         [SerializeField] private List<DifficultyData> _data;
         [SerializeField] private EInteractableIds _id;
         
@@ -26,7 +25,7 @@ namespace NightWatchman
         
         public void SetData(Difficulty difficulty)
         {
-            _difficulty = difficulty;
+            Difficulty = difficulty;
             var data = _data.FirstOrDefault(x => x.Difficulty == difficulty);
             if (data == null)
             {

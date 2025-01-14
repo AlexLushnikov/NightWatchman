@@ -4,12 +4,14 @@ namespace NightWatchman
     {
         private IResourceManager _resourceManager;
         private IPlayerController _playerController;
+        private ILevelService _levelService;
         
         public void Destroy()
         {
             DisposeAll();
             _resourceManager = null;
             _playerController = null;
+            _levelService = null;
         }
 
         public IResourceManager GetResourceManager()
@@ -31,6 +33,16 @@ namespace NightWatchman
             }
 
             return _playerController;
+        }
+
+        public ILevelService GetLevelService()
+        {
+            if (_levelService == null)
+            {
+                _levelService = new LevelService();
+            }
+
+            return _levelService;
         }
 
         private void DisposeAll()

@@ -21,5 +21,10 @@ namespace NightWatchman
         {
             return Composition.GetPlayerController();
         }
+
+        public static ILevelService GetLevelService()
+        {
+            return Composition.GetLevelService();
+        }
     }
 }
