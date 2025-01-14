@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace NightWatchman
@@ -13,29 +11,39 @@ namespace NightWatchman
 
         public bool IsAnomaly => Difficulty != Difficulty.None;
         
-        [SerializeField] private List<DifficultyData> _data;
+        [SerializeField] private GameObject _none;
+        [SerializeField] private GameObject _easy;
+        [SerializeField] private GameObject _medium;
+        [SerializeField] private GameObject _hard;
+        
         [SerializeField] private EInteractableIds _id;
         
-        private DifficultyData _currentData;
+        private GameObject _currentObject;
 
-        private void Start()
+        private void Awake()
         {
-            SetData(Difficulty.Easy);
+            SetData(Difficulty.None);
+            _easy.SetActive(false);
+            _medium.SetActive(false);
+            _hard.SetActive(false);
         }
         
         public void SetData(Difficulty difficulty)
         {
             Difficulty = difficulty;
-            var data = _data.FirstOrDefault(x => x.Difficulty == difficulty);
-            if (data == null)
+            GameObject data = difficulty switch
             {
-                throw new UnityException($"Data with type {difficulty} not found");
-            }
+                Difficulty.None => _none,
+                Difficulty.Easy => _easy,
+                Difficulty.Medium => _medium,
+                Difficulty.Hard => _hard,
+                _ => throw new ArgumentOutOfRangeException(nameof(difficulty), difficulty, null)
+            };
 
-            _currentData?.GameObject.SetActive(false);
+            _currentObject?.SetActive(false);
 
-            _currentData = data;
-            _currentData.GameObject.SetActive(true);
+            _currentObject = data;
+            _currentObject.SetActive(true);
         }
         
         public void ChangeState(InteractableState state)
@@ -43,13 +51,6 @@ namespace NightWatchman
             State = state;
             //change graphics
         }
-    }
-
-    [Serializable]
-    public class DifficultyData
-    {
-        public Difficulty Difficulty;
-        public GameObject GameObject;
     }
 
     public enum InteractableState

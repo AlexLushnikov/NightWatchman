@@ -195,7 +195,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 5
-  _mouseSensitivity: 100
+  _mouseSensitivity: 200
   _jumpForce: 200
   _cameraTransform: {fileID: 7121793933890009117}
   _rb: {fileID: -5482380574720726768}

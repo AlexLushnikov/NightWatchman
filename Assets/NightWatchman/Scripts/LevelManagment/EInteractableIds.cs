@@ -2,7 +2,9 @@
 {
     public enum EInteractableIds
     {
-        Chair1,
-        Table
+        Desk,
+        Chair_3,
+        Table,
+        CoatHook
     }
 }
