@@ -3,8 +3,9 @@ using UnityEngine;
 
 namespace NightWatchman
 {
-    public class Interactable : MonoBehaviour
+    public class Interactable : MonoBehaviour, IInteractable
     {
+        private readonly Color OutlineColor = new (1f, 0.42f, 0f);
         public EInteractableIds ID => _id;
         public InteractableState State { get; private set; }
         public Difficulty Difficulty { get; private set; }
@@ -19,19 +20,39 @@ namespace NightWatchman
         [SerializeField] private EInteractableIds _id;
         
         private GameObject _currentObject;
+        private Outline _outline;
 
         private void Awake()
         {
-            SetData(Difficulty.None);
+            gameObject.layer = LayerMask.NameToLayer("Interactable");
+            
             _easy.SetActive(false);
             _medium.SetActive(false);
             _hard.SetActive(false);
+        }
+
+        public void Init()
+        {
+            SetData(Difficulty.None);
+            CreateOutline();
+            _outline.OutlineMode = Outline.Mode.OutlineVisible;
+        }
+        
+        private void CreateOutline()
+        {
+            if (_outline == null)
+            {
+                _outline = gameObject.AddComponent<Outline>();
+                _outline.OutlineColor = OutlineColor;
+                _outline.OutlineMode = Outline.Mode.OutlineVisible;
+                _outline.enabled = false;
+            }
         }
         
         public void SetData(Difficulty difficulty)
         {
             Difficulty = difficulty;
-            GameObject data = difficulty switch
+            var data = difficulty switch
             {
                 Difficulty.None => _none,
                 Difficulty.Easy => _easy,
@@ -45,11 +66,17 @@ namespace NightWatchman
             _currentObject = data;
             _currentObject.SetActive(true);
         }
-        
+
         public void ChangeState(InteractableState state)
         {
+            if (State == state)
+            {
+                return;
+            }
+            
             State = state;
-            //change graphics
+            _outline.enabled = State is InteractableState.Selected or InteractableState.InProcess;
+            _outline.OutlineMode = Outline.Mode.OutlineVisible;
         }
     }
 

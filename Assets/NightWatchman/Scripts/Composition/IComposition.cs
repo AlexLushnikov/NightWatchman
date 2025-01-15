@@ -6,5 +6,6 @@ namespace NightWatchman
         IResourceManager GetResourceManager();
         IPlayerController GetPlayerController();
         ILevelService GetLevelService();
+        ICore GetCore();
     }
 }

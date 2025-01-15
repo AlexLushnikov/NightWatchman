@@ -26,5 +26,10 @@ namespace NightWatchman
         {
             return Composition.GetLevelService();
         }
+
+        public static ICore GetCore()
+        {
+            return Composition.GetCore();
+        }
     }
 }

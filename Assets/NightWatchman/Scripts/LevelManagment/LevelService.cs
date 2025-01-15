@@ -12,10 +12,12 @@ namespace NightWatchman
         private Environment _currentEnvironment;
         private Level _currentLevel;
 
+        public Level CurrentLevel => _currentLevel;
+        public Environment CurrentEnvironment => _currentEnvironment;
+
         public LevelService()
         {
             _data = Resources.Load<LevelsData>("NightWatchman/Levels/LevelsData");
-            SpawnLevel();
         }
 
         public void SpawnLevel()
@@ -33,7 +35,6 @@ namespace NightWatchman
 
             _currentLevel = _data.Levels[_currentLevelId];
             _currentEnvironment = Object.Instantiate(_currentLevel.Environment);
-            SetupAnomaly();
         }
 
         public void SetupAnomaly()

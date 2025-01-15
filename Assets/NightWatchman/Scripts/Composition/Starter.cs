@@ -9,6 +9,7 @@ namespace NightWatchman
             var resourceManager = CompositionRoot.GetResourceManager();
             var playerController = CompositionRoot.GetPlayerController();
             var levelService = CompositionRoot.GetLevelService();
+            var core = CompositionRoot.GetCore();
         }
     }
 }

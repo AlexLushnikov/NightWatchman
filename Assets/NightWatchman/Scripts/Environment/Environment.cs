@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -10,6 +11,14 @@ namespace NightWatchman
         [SerializeField] private List<Interactable> _interactableObjects;
 
         public Transform SpawnPoint => _spawnPoint;
+
+        public void Init()
+        {
+            foreach (var interactable in _interactableObjects)
+            {
+                interactable.Init();
+            }
+        }
 
         public void ActivateAnomaly(EInteractableIds id, Difficulty difficulty)
         {

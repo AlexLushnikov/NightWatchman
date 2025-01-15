@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace NightWatchman
 {
@@ -17,16 +16,14 @@ namespace NightWatchman
         [SerializeField] private Transform _cameraTransform;
         [SerializeField] private Rigidbody _rb;
         [SerializeField] private LayerMask _environmentMask;
+        [SerializeField] private Camera _camera;
 
         private Vector3 _movementInput;
         private float _verticalRotation;
         private bool _canJump;
 
-        private void Start()
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-        }
-
+        public Camera Camera => _camera;
+        
         private void Update()
         {
             HandleInput();
@@ -67,6 +64,11 @@ namespace NightWatchman
         private void OnCollisionEnter(Collision other)
         {
             _canJump = _environmentMask == (_environmentMask | (1 << other.gameObject.layer)) ;
+        }
+
+        public void Spawn(Vector3 spawnPoint)
+        {
+            transform.position = new Vector3(spawnPoint.x, transform.position.y, spawnPoint.z);
         }
     }
 }

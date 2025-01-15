@@ -202,6 +202,7 @@ MonoBehaviour:
   _environmentMask:
     serializedVersion: 2
     m_Bits: 64
+  _camera: {fileID: 2934601793390295389}
 --- !u!54 &-5482380574720726768
 Rigidbody:
   m_ObjectHideFlags: 0
