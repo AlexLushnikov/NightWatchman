@@ -1,4 +1,5 @@
 ﻿using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace NightWatchman
@@ -25,28 +26,28 @@ namespace NightWatchman
         private void Awake()
         {
             gameObject.layer = LayerMask.NameToLayer("Interactable");
-            
-            _easy.SetActive(false);
-            _medium.SetActive(false);
-            _hard.SetActive(false);
         }
 
         public void Init()
         {
+            AddOutline();
+            _easy.SetActive(false);
+            _medium.SetActive(false);
+            _hard.SetActive(false);
             SetData(Difficulty.None);
-            CreateOutline();
-            _outline.OutlineMode = Outline.Mode.OutlineVisible;
         }
         
-        private void CreateOutline()
+        private void AddOutline()
         {
-            if (_outline == null)
+            if (_outline != null)
             {
-                _outline = gameObject.AddComponent<Outline>();
-                _outline.OutlineColor = OutlineColor;
-                _outline.OutlineMode = Outline.Mode.OutlineVisible;
-                _outline.enabled = false;
+                return;
             }
+            
+            _outline = gameObject.AddComponent<Outline>();
+            _outline.OutlineColor = OutlineColor;
+            _outline.OutlineMode = Outline.Mode.OutlineVisible;
+            _outline.enabled = false;
         }
         
         public void SetData(Difficulty difficulty)
@@ -76,7 +77,6 @@ namespace NightWatchman
             
             State = state;
             _outline.enabled = State is InteractableState.Selected or InteractableState.InProcess;
-            _outline.OutlineMode = Outline.Mode.OutlineVisible;
         }
     }
 
