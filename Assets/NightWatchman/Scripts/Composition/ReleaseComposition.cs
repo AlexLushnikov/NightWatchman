@@ -29,7 +29,7 @@ namespace NightWatchman
             if (_playerController == null)
             {
                 var resourceManager = GetResourceManager();
-                _playerController = resourceManager.GetPrefab<PlayerController>(EPrefabs.Player);
+                _playerController = resourceManager.GetOrSpawnPrefab<PlayerController>(EPrefabs.Player);
             }
 
             return _playerController;

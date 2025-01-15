@@ -16,7 +16,7 @@ namespace NightWatchman
             _prefabStorage = Resources.Load<PrefabStorage>("NightWatchman/PrefabStorage");
         }
 
-        public T GetPrefab<T>(EPrefabs ePrefab) where T : Component
+        public T GetOrSpawnPrefab<T>(EPrefabs ePrefab) where T : Component
         {
             if (!_spawnedObjects.TryGetValue(ePrefab, out var go))
             {

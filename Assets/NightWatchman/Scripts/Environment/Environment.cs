@@ -6,7 +6,10 @@ namespace NightWatchman
 {
     public class Environment : MonoBehaviour
     {
+        [SerializeField] private Transform _spawnPoint;
         [SerializeField] private List<Interactable> _interactableObjects;
+
+        public Transform SpawnPoint => _spawnPoint;
 
         public void ActivateAnomaly(EInteractableIds id, Difficulty difficulty)
         {

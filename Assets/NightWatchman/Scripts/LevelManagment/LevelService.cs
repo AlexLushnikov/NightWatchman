@@ -33,10 +33,10 @@ namespace NightWatchman
 
             _currentLevel = _data.Levels[_currentLevelId];
             _currentEnvironment = Object.Instantiate(_currentLevel.Environment);
-            SetupEnvironment();
+            SetupAnomaly();
         }
 
-        private void SetupEnvironment()
+        public void SetupAnomaly()
         {
             var tempList = new List<EInteractableIds>(_currentLevel.AnomaliesIds);
             var easyObjects = SelectRandomObjects(tempList, _currentLevel.EasyCount);

@@ -4,5 +4,6 @@
     {
         void SpawnLevel();
         void FinishLevel();
+        void SetupAnomaly();
     }
 }

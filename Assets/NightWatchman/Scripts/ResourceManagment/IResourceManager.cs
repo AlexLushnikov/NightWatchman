@@ -4,6 +4,6 @@ namespace NightWatchman
 {
     public interface IResourceManager
     {
-        T GetPrefab<T>(EPrefabs ePrefab) where T : Component;
+        T GetOrSpawnPrefab<T>(EPrefabs ePrefab) where T : Component;
     }
 }
