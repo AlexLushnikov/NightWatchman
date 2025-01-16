@@ -7,7 +7,7 @@
         Difficulty Difficulty { get; }
         bool IsAnomaly { get; }
         void Init();
-        void SetData(Difficulty difficulty);
+        void SetDifficulty(Difficulty difficulty);
         void ChangeState(InteractableState state);
     }
 }

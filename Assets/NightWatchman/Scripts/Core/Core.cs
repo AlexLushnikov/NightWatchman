@@ -7,6 +7,7 @@ namespace NightWatchman
     public class Core : ICore, IDisposable
     {
         private float SelectionTime = 2f;
+        private float _selectDistance = 10f;
         
         private readonly LayerMask InteractableLayer = LayerMask.GetMask("Interactable");
         private ILevelService _levelService;
@@ -15,7 +16,6 @@ namespace NightWatchman
         private Camera _camera;
         private Vector3 _screenCenter;
 
-        private float _selectDistance = 10f;
         private Interactable _current;
         private CoreView _coreView;
 
@@ -97,8 +97,10 @@ namespace NightWatchman
                 _coreView.ActivateNotAnomalyText();
             }
             
+            _current.SetDifficulty(Difficulty.None);
             _current.ChangeState(InteractableState.Selected);
             _current = null;
+            _coreView.ChangeTarget(false);
         }
 
         private void StartLevel()
@@ -155,12 +157,14 @@ namespace NightWatchman
         private void SelectObject()
         {
             _current.ChangeState(InteractableState.InProcess);
+            _coreView.ChangeTarget(true);
         }
 
         private void DeselectObject()
         {
             _current.ChangeState(InteractableState.Default);
             _current = null;
+            _coreView.ChangeTarget(false);
         }
 
         public void Dispose()

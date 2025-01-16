@@ -8,9 +8,13 @@ namespace NightWatchman
 {
     public class CoreView : BaseView
     {
+        private Color DefaultTargetColor = Color.white;
+        private Color SelectTargetColor = new (1f, 0.42f, 0f);
+
         [SerializeField] private TMP_Text _counter;
         [SerializeField] private Image _progressSelector;
         [SerializeField] private GameObject _notAnomalyText;
+        [SerializeField] private Image _target;
 
         public void SetData(int current, int total, float progress)
         {
@@ -35,6 +39,11 @@ namespace NightWatchman
             {
                 _notAnomalyText.SetActive(false);
             });
+        }
+
+        public void ChangeTarget(bool selected)
+        {
+            _target.color = selected ? SelectTargetColor : DefaultTargetColor;
         }
     }
 }

@@ -21,7 +21,7 @@ namespace NightWatchman
         [SerializeField] private EInteractableIds _id;
         
         private GameObject _currentObject;
-        private Outline _outline;
+        //private Outline _outline;
 
         private void Awake()
         {
@@ -34,24 +34,24 @@ namespace NightWatchman
             _easy.SetActive(false);
             _medium.SetActive(false);
             _hard.SetActive(false);
-            SetData(Difficulty.None);
+            SetDifficulty(Difficulty.None);
         }
         
         private void AddOutline()
         {
-            if (_outline != null)
-            {
-                return;
-            }
+            // if (_outline != null)
+            // {
+            //     return;
+            // }
             
-            _outline = gameObject.AddComponent<Outline>();
-            _outline.OutlineColor = OutlineColor;
-            _outline.OutlineMode = Outline.Mode.OutlineVisible;
-            _outline.OutlineWidth = OutlineWidth;
-            _outline.enabled = false;
+            // _outline = gameObject.AddComponent<Outline>();
+            // _outline.OutlineColor = OutlineColor;
+            // _outline.OutlineMode = Outline.Mode.OutlineVisible;
+            // _outline.OutlineWidth = OutlineWidth;
+            // _outline.enabled = false;
         }
         
-        public void SetData(Difficulty difficulty)
+        public void SetDifficulty(Difficulty difficulty)
         {
             Difficulty = difficulty;
             var data = difficulty switch
@@ -77,7 +77,7 @@ namespace NightWatchman
             }
             
             State = state;
-            _outline.enabled = State is InteractableState.InProcess;
+            //_outline.enabled = State is InteractableState.InProcess;
         }
     }
 

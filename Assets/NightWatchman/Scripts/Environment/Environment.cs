@@ -29,7 +29,7 @@ namespace NightWatchman
             }
             else
             {
-                interactableObject.SetData(difficulty);
+                interactableObject.SetDifficulty(difficulty);
             }
         }
     }
