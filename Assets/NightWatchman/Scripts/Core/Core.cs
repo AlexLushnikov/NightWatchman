@@ -6,8 +6,8 @@ namespace NightWatchman
 {
     public class Core : ICore, IDisposable
     {
-        private float SelectionTime = 2f;
-        private float _selectDistance = 10f;
+        private float SelectionTime = 1f;
+        private float SelectDistance = 10f;
         
         private readonly LayerMask InteractableLayer = LayerMask.GetMask("Interactable");
         private ILevelService _levelService;
@@ -44,7 +44,7 @@ namespace NightWatchman
                 .Where(_ => Input.GetMouseButtonDown(0) && _current != null);
 
             var mouseUpStream = Observable.EveryUpdate()
-                .Where(_ => Input.GetMouseButtonUp(0));
+                .Where(_ => Input.GetMouseButtonUp(0) || _current == null);
 
             mouseDownStream
                 .Subscribe(_ => StartTimer(SelectionTime))
@@ -69,7 +69,7 @@ namespace NightWatchman
                 {
                     _timerProgress += Time.deltaTime / time;
                     _coreView.SetProgress(_timerProgress);
-                    if (_timerProgress >= 1f || _current == null)
+                    if (_timerProgress >= 1f)
                     {
                         _timerProgress = 1f;
                         TimerCompleted();
@@ -126,7 +126,7 @@ namespace NightWatchman
         {
             var ray = _camera.ScreenPointToRay(_screenCenter);
             
-            if (Physics.Raycast(ray, out var hit, _selectDistance, InteractableLayer))
+            if (Physics.Raycast(ray, out var hit, SelectDistance, InteractableLayer))
             {
                 var interactable = hit.collider.gameObject.GetComponentInParent<Interactable>();
                 if (interactable && interactable.State is not InteractableState.Selected)
