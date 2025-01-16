@@ -1,5 +1,4 @@
 ﻿using System;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace NightWatchman
@@ -7,6 +6,7 @@ namespace NightWatchman
     public class Interactable : MonoBehaviour, IInteractable
     {
         private readonly Color OutlineColor = new (1f, 0.42f, 0f);
+        private readonly float OutlineWidth = 2f;
         public EInteractableIds ID => _id;
         public InteractableState State { get; private set; }
         public Difficulty Difficulty { get; private set; }
@@ -47,6 +47,7 @@ namespace NightWatchman
             _outline = gameObject.AddComponent<Outline>();
             _outline.OutlineColor = OutlineColor;
             _outline.OutlineMode = Outline.Mode.OutlineVisible;
+            _outline.OutlineWidth = OutlineWidth;
             _outline.enabled = false;
         }
         

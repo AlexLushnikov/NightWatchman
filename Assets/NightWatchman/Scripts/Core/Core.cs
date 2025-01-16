@@ -68,12 +68,12 @@ namespace NightWatchman
                     _current = interactable;
                     SelectObject();
                 }
-                else
+            }
+            else
+            {
+                if (_current != null)
                 {
-                    if (_current != null)
-                    {
-                        DeselectObject();
-                    }
+                    DeselectObject();
                 }
             }
         }
@@ -86,6 +86,7 @@ namespace NightWatchman
         private void DeselectObject()
         {
             _current.ChangeState(InteractableState.Default);
+            _current = null;
         }
 
         public void Dispose()
