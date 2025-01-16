@@ -77,7 +77,7 @@ namespace NightWatchman
             }
             
             State = state;
-            _outline.enabled = State is InteractableState.Selected or InteractableState.InProcess;
+            _outline.enabled = State is InteractableState.InProcess;
         }
     }
 
@@ -85,8 +85,7 @@ namespace NightWatchman
     {
         Default,
         InProcess,
-        Selected,
-        Disable
+        Selected
     }
 
     public enum Difficulty
