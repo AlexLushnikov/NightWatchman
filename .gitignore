@@ -22,6 +22,10 @@
 # Visual Studio cache directory
 .vs/
 
+# Editor files
+EditorUserSettings.asset
+default-6000.dwlt
+
 # Gradle cache directory
 .gradle/
 
@@ -59,5 +63,3 @@ sysinfo.txt
 crashlytics-build.properties
 .idea/
 [Ll]ogs*
-UserSettings/EditorUserSettings.asset
-default-6000.dwlt

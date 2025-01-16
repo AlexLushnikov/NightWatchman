@@ -17,7 +17,7 @@ namespace NightWatchman
             return Composition.GetResourceManager();
         }
 
-        public static IPlayerController GetPlayerController()
+        public static IPlayer GetPlayerController()
         {
             return Composition.GetPlayerController();
         }
@@ -30,6 +30,16 @@ namespace NightWatchman
         public static ICore GetCore()
         {
             return Composition.GetCore();
+        }
+
+        public static IUIRoot GetUIRoot()
+        {
+            return Composition.GetUIRoot();
+        }
+
+        public static IViewsFactory GetViewsFactory()
+        {
+            return Composition.GetViewsFactory();
         }
     }
 }

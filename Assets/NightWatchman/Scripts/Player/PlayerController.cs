@@ -2,7 +2,7 @@
 
 namespace NightWatchman
 {
-    public class PlayerController : MonoBehaviour, IPlayerController
+    public class PlayerController : MonoBehaviour
     {
         private const string VerticalAxis = "Vertical";
         private const string HorizontalAxis = "Horizontal";
@@ -16,13 +16,9 @@ namespace NightWatchman
         [SerializeField] private Transform _cameraTransform;
         [SerializeField] private Rigidbody _rb;
         [SerializeField] private LayerMask _environmentMask;
-        [SerializeField] private Camera _camera;
-
         private Vector3 _movementInput;
         private float _verticalRotation;
         private bool _canJump;
-
-        public Camera Camera => _camera;
         
         private void Update()
         {
@@ -64,11 +60,6 @@ namespace NightWatchman
         private void OnCollisionEnter(Collision other)
         {
             _canJump = _environmentMask == (_environmentMask | (1 << other.gameObject.layer)) ;
-        }
-
-        public void Spawn(Vector3 spawnPoint)
-        {
-            transform.position = new Vector3(spawnPoint.x, transform.position.y, spawnPoint.z);
         }
     }
 }
