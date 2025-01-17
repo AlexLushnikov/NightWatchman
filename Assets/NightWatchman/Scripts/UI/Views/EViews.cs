@@ -2,6 +2,6 @@
 {
     public enum EViews
     {
-        CoreView
+        CoreView, MenuView
     }
 }

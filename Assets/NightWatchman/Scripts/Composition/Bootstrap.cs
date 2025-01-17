@@ -11,6 +11,7 @@ namespace NightWatchman
             var levelService = CompositionRoot.GetLevelService();
             var core = CompositionRoot.GetCore();
             var uiRoot = CompositionRoot.GetUIRoot();
+            //var menuPresenter = CompositionRoot.GetMenuPresenter();
         }
     }
 }

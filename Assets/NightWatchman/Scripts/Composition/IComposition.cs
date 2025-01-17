@@ -9,5 +9,6 @@ namespace NightWatchman
         ICore GetCore();
         IUIRoot GetUIRoot();
         IViewsFactory GetViewsFactory();
+        MenuPresenter GetMenuPresenter();
     }
 }

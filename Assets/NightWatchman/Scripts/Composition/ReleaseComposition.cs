@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace NightWatchman
@@ -13,6 +14,8 @@ namespace NightWatchman
         private IUIRoot _uiRoot;
         private IViewsFactory _viewsFactory;
 
+        private MenuPresenter _menuPresenter;
+
         public void Destroy()
         {
             DisposeAll();
@@ -22,6 +25,7 @@ namespace NightWatchman
             _core = null;
             _uiRoot = null;
             _viewsFactory = null;
+            _menuPresenter = null;
         }
 
         public IResourceManager GetResourceManager()
@@ -91,8 +95,26 @@ namespace NightWatchman
             return _viewsFactory;
         }
 
+        public MenuPresenter GetMenuPresenter()
+        {
+            if (_menuPresenter == null)
+            {
+                var viewFactory = GetViewsFactory();
+                _menuPresenter = new MenuPresenter(viewFactory);
+            }
+
+            return _menuPresenter;
+        }
+
         private void DisposeAll()
         {
+            (_resourceManager as IDisposable)?.Dispose();
+            (_player as IDisposable)?.Dispose();
+            (_levelService as IDisposable)?.Dispose();
+            (_core as IDisposable)?.Dispose();
+            (_uiRoot as IDisposable)?.Dispose();
+            (_viewsFactory as IDisposable)?.Dispose();
+            (_menuPresenter as IDisposable)?.Dispose();
         }
     }
 }

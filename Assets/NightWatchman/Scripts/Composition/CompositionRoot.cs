@@ -41,5 +41,10 @@ namespace NightWatchman
         {
             return Composition.GetViewsFactory();
         }
+
+        public static MenuPresenter GetMenuPresenter()
+        {
+            return Composition.GetMenuPresenter();
+        }
     }
 }

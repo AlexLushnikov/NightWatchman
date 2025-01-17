@@ -1,4 +1,5 @@
 ﻿using System;
+using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
 
@@ -10,13 +11,15 @@ namespace NightWatchman
 
         private Interactable _current;
 
-        private int _currentFound;
         private readonly CompositeDisposable _disposable = new();
         private readonly ILevelService _levelService;
         private readonly IPlayer _player;
         private readonly Selector _selector;
         private IDisposable _timerDisposable;
+        
+        private int _currentFound;
         private int _totalAnomalies;
+        private int _mistakeCount;
 
         public Core(ILevelService levelService, IPlayer player, IViewsFactory viewsFactory)
         {
@@ -99,7 +102,7 @@ namespace NightWatchman
         {
             if (_current is Door)
             {
-                ChangeCoreState();
+                ChangeCoreState().Forget();
                 _current = null;
                 return;
             }
@@ -107,11 +110,12 @@ namespace NightWatchman
             if (_current.IsAnomaly)
             {
                 _currentFound++;
-                _coreView.SetCount(_currentFound, _totalAnomalies);
+                _coreView.SetAnomalyCount(_currentFound, _totalAnomalies);
             }
             else
             {
-                _coreView.ActivateNotAnomalyText();
+                _mistakeCount++;
+                _coreView.SetMistakeCount(_mistakeCount);
             }
 
             _current.SetDifficulty(Difficulty.None);
@@ -120,9 +124,12 @@ namespace NightWatchman
             _coreView.ChangeTarget(false);
         }
 
-        private void ChangeCoreState()
+        private async UniTask ChangeCoreState()
         {
+            await _coreView.EnableFade();
             StartNight();
+            await UniTask.WaitForSeconds(1f);
+            await _coreView.DisableFade();
         }
 
         private void StartLevel()
@@ -132,8 +139,8 @@ namespace NightWatchman
             _player.Spawn(spawnPoint);
             _totalAnomalies = _levelService.CurrentLevel.AnomaliesCount;
             _currentFound = 0;
+            _mistakeCount = 0;
 
-            _coreView.SetData(_currentFound, _totalAnomalies, 0);
             _coreView.Enable();
         }
 
@@ -147,7 +154,8 @@ namespace NightWatchman
         {
             _levelService.SetupNight();
             _coreView.SetNightText();
-            _coreView.SetCount(0, _totalAnomalies);
+            _coreView.SetAnomalyCount(0, _totalAnomalies);
+            _coreView.SetMistakeCount(_mistakeCount);
         }
 
         private void SelectObject()

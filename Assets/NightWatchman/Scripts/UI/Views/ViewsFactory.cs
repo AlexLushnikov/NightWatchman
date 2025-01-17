@@ -18,5 +18,13 @@
             view.transform.SetParent(canvasTransform, false);
             return view;
         }
+
+        public MenuView GetMenuView()
+        {
+            var view = _resourceManager.GetOrSpawnView<MenuView>(EViews.MenuView);
+            var canvasTransform = _uiRoot.MainCanvas;
+            view.transform.SetParent(canvasTransform, false);
+            return view;
+        }
     }
 }
