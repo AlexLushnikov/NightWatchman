@@ -37,7 +37,7 @@ namespace NightWatchman
             _currentEnvironment = Object.Instantiate(_currentLevel.Environment);
         }
 
-        public void SetupAnomaly()
+        public void SetupNight()
         {
             var tempList = new List<EInteractableIds>(_currentLevel.AnomaliesIds);
             var easyObjects = SelectRandomObjects(tempList, _currentLevel.EasyCount);
@@ -47,6 +47,8 @@ namespace NightWatchman
             ActivateAnomaly(easyObjects, Difficulty.Easy);
             ActivateAnomaly(mediumObjects, Difficulty.Medium);
             ActivateAnomaly(hardObjects, Difficulty.Hard);
+            
+            _currentEnvironment.SetupNight();
         }
 
         private void ActivateAnomaly(List<EInteractableIds> easyObjects, Difficulty difficulty)

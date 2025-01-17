@@ -6,23 +6,17 @@ namespace NightWatchman
 {
     public class Core : ICore, IDisposable
     {
-        private float SelectionTime = 1f;
-        private float SelectDistance = 10f;
-        
-        private readonly LayerMask InteractableLayer = LayerMask.GetMask("Interactable");
-        private ILevelService _levelService;
-        private IPlayer _player;
-        private CompositeDisposable _disposable = new();
-        private Camera _camera;
-        private Vector3 _screenCenter;
+        private readonly CoreView _coreView;
 
         private Interactable _current;
-        private CoreView _coreView;
 
         private int _currentFound;
-        private int _totalAnomalies;
+        private readonly CompositeDisposable _disposable = new();
+        private readonly ILevelService _levelService;
+        private readonly IPlayer _player;
+        private readonly Selector _selector;
         private IDisposable _timerDisposable;
-        
+        private int _totalAnomalies;
 
         public Core(ILevelService levelService, IPlayer player, IViewsFactory viewsFactory)
         {
@@ -30,16 +24,12 @@ namespace NightWatchman
             _player = player;
             _coreView = viewsFactory.GetCoreView();
             _coreView.Disable();
-            
-            _levelService.SpawnLevel();
-            var spawnPoint = _levelService.CurrentEnvironment.SpawnPoint.position;
-            _player.Spawn(spawnPoint);
-            _camera = _player.Camera;
-            _totalAnomalies = _levelService.CurrentLevel.AnomaliesCount;
-            
+
             Cursor.lockState = CursorLockMode.Locked;
-            
-            Observable.EveryUpdate().Subscribe(Update).AddTo(_disposable);
+
+            _selector = new Selector(_player.Camera);
+            _selector.Selected.Subscribe(SelectedChanged).AddTo(_disposable);
+
             var mouseDownStream = Observable.EveryUpdate()
                 .Where(_ => Input.GetMouseButtonDown(0) && _current != null);
 
@@ -47,17 +37,37 @@ namespace NightWatchman
                 .Where(_ => Input.GetMouseButtonUp(0) || _current == null);
 
             mouseDownStream
-                .Subscribe(_ => StartTimer(SelectionTime))
+                .Subscribe(_ => StartTimer(GameplaySettings.SelectionTime))
                 .AddTo(_disposable);
 
             mouseUpStream
                 .Subscribe(_ => CancelTimer())
                 .AddTo(_disposable);
 
-            Prepare();
             StartLevel();
+            StartDay();
         }
-        
+
+        public void Dispose()
+        {
+            _timerDisposable?.Dispose();
+            _disposable?.Dispose();
+        }
+
+        private void SelectedChanged(Interactable interactable)
+        {
+            if (_current != null)
+            {
+                DeselectObject();
+            }
+
+            _current = interactable;
+            if (_current != null)
+            {
+                SelectObject();
+            }
+        }
+
         private void StartTimer(float time)
         {
             CancelTimer();
@@ -87,6 +97,13 @@ namespace NightWatchman
 
         private void TimerCompleted()
         {
+            if (_current is Door)
+            {
+                ChangeCoreState();
+                _current = null;
+                return;
+            }
+
             if (_current.IsAnomaly)
             {
                 _currentFound++;
@@ -96,62 +113,41 @@ namespace NightWatchman
             {
                 _coreView.ActivateNotAnomalyText();
             }
-            
+
             _current.SetDifficulty(Difficulty.None);
             _current.ChangeState(InteractableState.Selected);
             _current = null;
             _coreView.ChangeTarget(false);
         }
 
+        private void ChangeCoreState()
+        {
+            StartNight();
+        }
+
         private void StartLevel()
         {
+            _levelService.SpawnLevel();
+            var spawnPoint = _levelService.CurrentEnvironment.SpawnPoint.position;
+            _player.Spawn(spawnPoint);
+            _totalAnomalies = _levelService.CurrentLevel.AnomaliesCount;
+            _currentFound = 0;
+
             _coreView.SetData(_currentFound, _totalAnomalies, 0);
             _coreView.Enable();
         }
 
-        private void Prepare()
+        private void StartDay()
         {
-            _screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, 0);
-            
-            _levelService.CurrentEnvironment.Init();
-            _levelService.SetupAnomaly();
+            _levelService.CurrentEnvironment.SetupDay();
+            _coreView.SetDayText();
         }
 
-        private void Update(long _)
+        private void StartNight()
         {
-            CheckForInteractable();
-        }
-
-        private void CheckForInteractable()
-        {
-            var ray = _camera.ScreenPointToRay(_screenCenter);
-            
-            if (Physics.Raycast(ray, out var hit, SelectDistance, InteractableLayer))
-            {
-                var interactable = hit.collider.gameObject.GetComponentInParent<Interactable>();
-                if (interactable && interactable.State is not InteractableState.Selected)
-                {
-                    if (_current == interactable)
-                    {
-                        return;
-                    }
-                    
-                    if (_current != null)
-                    {
-                        DeselectObject();
-                    }
-
-                    _current = interactable;
-                    SelectObject();
-                }
-            }
-            else
-            {
-                if (_current != null)
-                {
-                    DeselectObject();
-                }
-            }
+            _levelService.SetupNight();
+            _coreView.SetNightText();
+            _coreView.SetCount(0, _totalAnomalies);
         }
 
         private void SelectObject()
@@ -163,14 +159,7 @@ namespace NightWatchman
         private void DeselectObject()
         {
             _current.ChangeState(InteractableState.Default);
-            _current = null;
             _coreView.ChangeTarget(false);
-        }
-
-        public void Dispose()
-        {
-            _timerDisposable?.Dispose();
-            _disposable?.Dispose();
         }
     }
 }

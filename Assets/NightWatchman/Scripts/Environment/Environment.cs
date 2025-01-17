@@ -9,15 +9,18 @@ namespace NightWatchman
     {
         [SerializeField] private Transform _spawnPoint;
         [SerializeField] private List<Interactable> _interactableObjects;
-
+        [SerializeField] private Door _door;
+        
         public Transform SpawnPoint => _spawnPoint;
 
-        public void Init()
+        public void SetupDay()
         {
             foreach (var interactable in _interactableObjects)
             {
                 interactable.Init();
             }
+            
+            _door.ChangeState(InteractableState.Default);
         }
 
         public void ActivateAnomaly(EInteractableIds id, Difficulty difficulty)
@@ -30,6 +33,14 @@ namespace NightWatchman
             else
             {
                 interactableObject.SetDifficulty(difficulty);
+            }
+        }
+
+        public void SetupNight()
+        {
+            foreach (var interactable in _interactableObjects)
+            {
+                interactable.ChangeState(InteractableState.Default);
             }
         }
     }

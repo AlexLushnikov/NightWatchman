@@ -5,8 +5,6 @@ namespace NightWatchman
 {
     public class Interactable : MonoBehaviour, IInteractable
     {
-        private readonly Color OutlineColor = new (1f, 0.42f, 0f);
-        private readonly float OutlineWidth = 2f;
         public EInteractableIds ID => _id;
         public InteractableState State { get; private set; }
         public Difficulty Difficulty { get; private set; }
@@ -21,34 +19,14 @@ namespace NightWatchman
         [SerializeField] private EInteractableIds _id;
         
         private GameObject _currentObject;
-        //private Outline _outline;
-
-        private void Awake()
-        {
-            gameObject.layer = LayerMask.NameToLayer("Interactable");
-        }
 
         public void Init()
         {
-            AddOutline();
             _easy.SetActive(false);
             _medium.SetActive(false);
             _hard.SetActive(false);
             SetDifficulty(Difficulty.None);
-        }
-        
-        private void AddOutline()
-        {
-            // if (_outline != null)
-            // {
-            //     return;
-            // }
-            
-            // _outline = gameObject.AddComponent<Outline>();
-            // _outline.OutlineColor = OutlineColor;
-            // _outline.OutlineMode = Outline.Mode.OutlineVisible;
-            // _outline.OutlineWidth = OutlineWidth;
-            // _outline.enabled = false;
+            ChangeState(InteractableState.None);
         }
         
         public void SetDifficulty(Difficulty difficulty)
@@ -77,12 +55,12 @@ namespace NightWatchman
             }
             
             State = state;
-            //_outline.enabled = State is InteractableState.InProcess;
         }
     }
 
     public enum InteractableState
     {
+        None,
         Default,
         InProcess,
         Selected

@@ -6,6 +6,6 @@
         Environment CurrentEnvironment { get; }
         void SpawnLevel();
         void FinishLevel();
-        void SetupAnomaly();
+        void SetupNight();
     }
 }

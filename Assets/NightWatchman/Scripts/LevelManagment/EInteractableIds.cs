@@ -31,6 +31,7 @@ namespace NightWatchman
         Table_Big,
         Throne,
         Throne_1,
-        Firewood_1
+        Firewood_1,
+        Door = 1000
     }
 }

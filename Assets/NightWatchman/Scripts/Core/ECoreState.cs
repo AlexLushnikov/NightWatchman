@@ -2,6 +2,6 @@
 {
     public enum ECoreState
     {
-        Night
+        Day, Night
     }
 }
