@@ -7,6 +7,7 @@ namespace NightWatchman
 {
     public class Core : ICore, IDisposable
     {
+        private const string SelectButton = "Select";
         private readonly CoreView _coreView;
 
         private Interactable _current;
@@ -34,10 +35,10 @@ namespace NightWatchman
             _selector.Selected.Subscribe(SelectedChanged).AddTo(_disposable);
 
             var mouseDownStream = Observable.EveryUpdate()
-                .Where(_ => UnityEngine.Input.GetMouseButtonDown(0) && _current != null);
+                .Where(_ => SimpleInput.GetButtonDown(SelectButton) && _current != null);
 
             var mouseUpStream = Observable.EveryUpdate()
-                .Where(_ => UnityEngine.Input.GetMouseButtonUp(0) || _current == null);
+                .Where(_ => SimpleInput.GetButtonUp(SelectButton) || _current == null);
 
             mouseDownStream
                 .Subscribe(_ => StartTimer(GameplaySettings.SelectionTime))

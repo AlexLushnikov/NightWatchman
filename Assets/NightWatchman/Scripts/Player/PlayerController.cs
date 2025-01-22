@@ -27,9 +27,9 @@ namespace NightWatchman
             _inputHandler.OnRotate += HandleRotation;
         }
 
-        private void HandleJump(float value)
+        private void HandleJump()
         {
-            if (value > 0 && _canJump)
+            if (_canJump)
             {
                 _rb.AddForce(transform.up * _jumpForce, ForceMode.Impulse);
                 _canJump = false;

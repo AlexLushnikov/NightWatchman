@@ -46,11 +46,11 @@ namespace NightWatchman
         {
             if (dependsOnPlatform)
             {
-#if UNITY_EDITOR || Unity_STANDALONE
+#if UNITY_EDITOR || UNITY_STANDALONE
                 return _storage.PCPrefabs.FirstOrDefault(x => x.TryGetComponent<T>(out var component));
 #endif
                 
-#if UNITY_IOS || UNITY_IPHONE
+#if UNITY_IOS || UNITY_ANDROID
                 return _storage.MobilePrefabs.FirstOrDefault(x => x.TryGetComponent<T>(out var component));
 #endif
                 throw new UnityException($"Platform not supported");
