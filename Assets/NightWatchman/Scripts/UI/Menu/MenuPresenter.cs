@@ -15,7 +15,7 @@ namespace NightWatchman
             _view.Disable();
 
             Observable.EveryUpdate()
-                .Where(_ => Input.GetKeyDown(KeyCode.Escape))
+                .Where(_ => UnityEngine.Input.GetKeyDown(KeyCode.Escape))
                 .Subscribe(EscapeClicked)
                 .AddTo(_disposable);
         }

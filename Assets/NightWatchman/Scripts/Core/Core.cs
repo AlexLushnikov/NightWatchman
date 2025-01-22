@@ -28,16 +28,16 @@ namespace NightWatchman
             _coreView = viewsFactory.GetCoreView();
             _coreView.Disable();
 
-            Cursor.lockState = CursorLockMode.Locked;
+            //Cursor.lockState = CursorLockMode.Locked;
 
             _selector = new Selector(_player.Camera);
             _selector.Selected.Subscribe(SelectedChanged).AddTo(_disposable);
 
             var mouseDownStream = Observable.EveryUpdate()
-                .Where(_ => Input.GetMouseButtonDown(0) && _current != null);
+                .Where(_ => UnityEngine.Input.GetMouseButtonDown(0) && _current != null);
 
             var mouseUpStream = Observable.EveryUpdate()
-                .Where(_ => Input.GetMouseButtonUp(0) || _current == null);
+                .Where(_ => UnityEngine.Input.GetMouseButtonUp(0) || _current == null);
 
             mouseDownStream
                 .Subscribe(_ => StartTimer(GameplaySettings.SelectionTime))
@@ -49,12 +49,6 @@ namespace NightWatchman
 
             StartLevel();
             StartDay();
-        }
-
-        public void Dispose()
-        {
-            _timerDisposable?.Dispose();
-            _disposable?.Dispose();
         }
 
         private void SelectedChanged(Interactable interactable)
@@ -116,6 +110,7 @@ namespace NightWatchman
             {
                 _mistakeCount++;
                 _coreView.SetMistakeCount(_mistakeCount);
+                _coreView.ActivateNotAnomalyText();
             }
 
             _current.SetDifficulty(Difficulty.None);
@@ -168,6 +163,12 @@ namespace NightWatchman
         {
             _current.ChangeState(InteractableState.Default);
             _coreView.ChangeTarget(false);
+        }
+        
+        public void Dispose()
+        {
+            _timerDisposable?.Dispose();
+            _disposable?.Dispose();
         }
     }
 }

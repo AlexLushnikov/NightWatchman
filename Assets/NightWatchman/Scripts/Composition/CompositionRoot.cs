@@ -46,5 +46,10 @@ namespace NightWatchman
         {
             return Composition.GetMenuPresenter();
         }
+
+        public static IInputHandler GetInputHandler()
+        {
+            return Composition.GetInputHandler();
+        }
     }
 }

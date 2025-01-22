@@ -60,7 +60,7 @@ namespace NightWatchman
             await _fade.DOFade(0f, _fadeDuration).ToUniTask();
         }
 
-        private void ActivateNotAnomalyText()
+        public void ActivateNotAnomalyText()
         {
             _notAnomalyText.SetActive(true);
             Observable.Timer(TimeSpan.FromSeconds(1f)).Subscribe(_ =>

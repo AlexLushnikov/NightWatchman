@@ -13,6 +13,7 @@ namespace NightWatchman
         private ICore _core;
         private IUIRoot _uiRoot;
         private IViewsFactory _viewsFactory;
+        private IInputHandler _inputHandler;
 
         private MenuPresenter _menuPresenter;
 
@@ -26,6 +27,7 @@ namespace NightWatchman
             _uiRoot = null;
             _viewsFactory = null;
             _menuPresenter = null;
+            _inputHandler = null;
         }
 
         public IResourceManager GetResourceManager()
@@ -106,6 +108,17 @@ namespace NightWatchman
             return _menuPresenter;
         }
 
+        public IInputHandler GetInputHandler()
+        {
+            if (_inputHandler == null)
+            {
+                var resourceManager = GetResourceManager();
+                _inputHandler = new InputHandler(resourceManager);
+            }
+
+            return _inputHandler;
+        }
+
         private void DisposeAll()
         {
             (_resourceManager as IDisposable)?.Dispose();
@@ -115,6 +128,7 @@ namespace NightWatchman
             (_uiRoot as IDisposable)?.Dispose();
             (_viewsFactory as IDisposable)?.Dispose();
             (_menuPresenter as IDisposable)?.Dispose();
+            (_inputHandler as IDisposable)?.Dispose();
         }
     }
 }

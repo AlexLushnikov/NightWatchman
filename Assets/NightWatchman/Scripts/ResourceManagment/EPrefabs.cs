@@ -1,4 +1,4 @@
 ﻿public enum EPrefabs
 {
-    Player, UIRoot
+    Player, UIRoot, Input
 }

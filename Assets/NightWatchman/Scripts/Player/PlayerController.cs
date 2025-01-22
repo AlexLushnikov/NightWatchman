@@ -1,54 +1,54 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace NightWatchman
 {
     public class PlayerController : MonoBehaviour
     {
-        private const string VerticalAxis = "Vertical";
-        private const string HorizontalAxis = "Horizontal";
-        private const string MouseYAxis = "Mouse Y";
-        private const string MouseXAxis = "Mouse X";
-        private const string JumpAxis = "Jump";
-        
         [SerializeField] private float _speed = 5f;
         [SerializeField] private float _mouseSensitivity = 2f;
         [SerializeField] private float _jumpForce = 200f;
         [SerializeField] private Transform _cameraTransform;
         [SerializeField] private Rigidbody _rb;
         [SerializeField] private LayerMask _environmentMask;
+
+        private IInputHandler _inputHandler;
+
         private Vector3 _movementInput;
         private float _verticalRotation;
         private bool _canJump;
-        
-        private void Update()
+
+        private void Awake()
         {
-            HandleInput();
-            HandleCameraRotation();
-            HandleJump();
+            _inputHandler = CompositionRoot.GetInputHandler();
+            
+            _inputHandler.OnJump += HandleJump;
+            _inputHandler.OnMove += HandleMove;
+            _inputHandler.OnRotate += HandleRotation;
         }
 
-        private void HandleJump()
+        private void HandleJump(float value)
         {
-            if (Input.GetAxis(JumpAxis) > 0 && _canJump)
+            if (value > 0 && _canJump)
             {
                 _rb.AddForce(transform.up * _jumpForce, ForceMode.Impulse);
                 _canJump = false;
             }
         }
         
-        private void HandleInput()
+        private void HandleMove(Vector2 value)
         {
-            var moveX = Input.GetAxis(HorizontalAxis);
-            var moveZ = Input.GetAxis(VerticalAxis);
+            var moveX = value.x;
+            var moveZ = value.y;
             
             _movementInput = (transform.right * moveX + transform.forward * moveZ).normalized * _speed;
             transform.position += _movementInput * Time.deltaTime;
         }
 
-        private void HandleCameraRotation()
+        private void HandleRotation(Vector2 value)
         {
-            var mouseX = Input.GetAxis(MouseXAxis) * _mouseSensitivity * Time.deltaTime;
-            var mouseY = Input.GetAxis(MouseYAxis) * _mouseSensitivity * Time.deltaTime;
+            var mouseX = value.x * _mouseSensitivity * Time.deltaTime;
+            var mouseY = value.y * _mouseSensitivity * Time.deltaTime;
 
             transform.Rotate(Vector3.up * mouseX);
 

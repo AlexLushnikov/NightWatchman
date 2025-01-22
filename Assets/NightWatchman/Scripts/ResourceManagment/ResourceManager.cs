@@ -17,11 +17,11 @@ namespace NightWatchman
             _storage = Resources.Load<Storage>(storagePath);
         }
 
-        public T GetOrSpawnPrefab<T>(EPrefabs ePrefab) where T : Component
+        public T GetOrSpawnPrefab<T>(EPrefabs ePrefab, bool dependsOnPlatform = false) where T : Component
         {
             if (!_spawnedObjects.TryGetValue(ePrefab, out var go))
             {
-                var prefab = _storage.Prefabs.FirstOrDefault(x => x.TryGetComponent<T>(out var component));
+                var prefab = GetPrefab<T>(dependsOnPlatform);
                 if (prefab != null)
                 {
                     go = Object.Instantiate(prefab);
@@ -40,6 +40,25 @@ namespace NightWatchman
             }
 
             return (T)component;
+        }
+
+        private GameObject GetPrefab<T>(bool dependsOnPlatform)
+        {
+            if (dependsOnPlatform)
+            {
+#if UNITY_EDITOR || Unity_STANDALONE
+                return _storage.PCPrefabs.FirstOrDefault(x => x.TryGetComponent<T>(out var component));
+#endif
+                
+#if UNITY_IOS || UNITY_IPHONE
+                return _storage.MobilePrefabs.FirstOrDefault(x => x.TryGetComponent<T>(out var component));
+#endif
+                throw new UnityException($"Platform not supported");
+            }
+            else
+            {
+                return _storage.Prefabs.FirstOrDefault(x => x.TryGetComponent<T>(out var component));
+            }
         }
         
         public T GetOrSpawnView<T>(EViews eView) where T : BaseView
