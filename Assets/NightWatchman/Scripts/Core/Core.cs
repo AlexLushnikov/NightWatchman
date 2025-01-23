@@ -28,9 +28,7 @@ namespace NightWatchman
             _player = player;
             _coreView = viewsFactory.GetCoreView();
             _coreView.Disable();
-
-            //Cursor.lockState = CursorLockMode.Locked;
-
+            
             _selector = new Selector(_player.Camera);
             _selector.Selected.Subscribe(SelectedChanged).AddTo(_disposable);
 
