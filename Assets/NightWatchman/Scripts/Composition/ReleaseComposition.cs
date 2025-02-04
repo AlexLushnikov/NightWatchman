@@ -14,6 +14,7 @@ namespace NightWatchman
         private IUIRoot _uiRoot;
         private IViewsFactory _viewsFactory;
         private IInputHandler _inputHandler;
+        private ISoundsService _soundsService;
 
         private MenuPresenter _menuPresenter;
 
@@ -28,6 +29,7 @@ namespace NightWatchman
             _viewsFactory = null;
             _menuPresenter = null;
             _inputHandler = null;
+            _soundsService = null;
         }
 
         public IResourceManager GetResourceManager()
@@ -45,7 +47,7 @@ namespace NightWatchman
             if (_player == null)
             {
                 var resourceManager = GetResourceManager();
-                _player = resourceManager.GetOrSpawnPrefab<Player>(EPrefabs.Player);
+                _player = resourceManager.GetOrSpawnPrefab<Player>(EComponents.Player);
             }
 
             return _player;
@@ -79,7 +81,7 @@ namespace NightWatchman
             if (_uiRoot == null)
             {
                 var resourceManager = GetResourceManager();
-                _uiRoot = resourceManager.GetOrSpawnPrefab<UIRoot>(EPrefabs.UIRoot);
+                _uiRoot = resourceManager.GetOrSpawnPrefab<UIRoot>(EComponents.UIRoot);
             }
 
             return _uiRoot;
@@ -117,6 +119,17 @@ namespace NightWatchman
             }
 
             return _inputHandler;
+        }
+
+        public ISoundsService GetSoundsService()
+        {
+            if (_soundsService == null)
+            {
+                var resourceManager = GetResourceManager();
+                _soundsService = resourceManager.GetOrSpawnPrefab<SoundsService>(EComponents.SoundsService);
+            }
+
+            return _soundsService;
         }
 
         private void DisposeAll()

@@ -9,7 +9,7 @@ namespace NightWatchman
     public class ResourceManager : IResourceManager
     {
         private Storage _storage;
-        private Dictionary<EPrefabs, GameObject> _spawnedObjects = new ();
+        private Dictionary<EComponents, GameObject> _spawnedComponents = new ();
         private Dictionary<EViews, BaseView> _views = new();
 
         public ResourceManager(string storagePath)
@@ -17,15 +17,15 @@ namespace NightWatchman
             _storage = Resources.Load<Storage>(storagePath);
         }
 
-        public T GetOrSpawnPrefab<T>(EPrefabs ePrefab, bool dependsOnPlatform = false) where T : Component
+        public T GetOrSpawnPrefab<T>(EComponents eComponent, bool dependsOnPlatform = false) where T : Component
         {
-            if (!_spawnedObjects.TryGetValue(ePrefab, out var go))
+            if (!_spawnedComponents.TryGetValue(eComponent, out var go))
             {
                 var prefab = GetPrefab<T>(dependsOnPlatform);
                 if (prefab != null)
                 {
                     go = Object.Instantiate(prefab);
-                    _spawnedObjects.Add(ePrefab, go);
+                    _spawnedComponents.Add(eComponent, go);
                 }
                 else
                 {

@@ -51,5 +51,10 @@ namespace NightWatchman
         {
             return Composition.GetInputHandler();
         }
+
+        public static ISoundsService GetSoundsService()
+        {
+            return Composition.GetSoundsService();
+        }
     }
 }

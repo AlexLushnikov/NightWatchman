@@ -11,5 +11,6 @@ namespace NightWatchman
         IViewsFactory GetViewsFactory();
         MenuPresenter GetMenuPresenter();
         IInputHandler GetInputHandler();
+        ISoundsService GetSoundsService();
     }
 }

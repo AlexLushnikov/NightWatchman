@@ -4,11 +4,9 @@ namespace NightWatchman
 {
     public class ButtonInputMouse : MonoBehaviour
     {
-#pragma warning disable 0649
-        [SerializeField] private int mouseButton;
-#pragma warning restore 0649
+        [SerializeField] private int _mouseButton;
 
-        public SimpleInput.ButtonInput button = new SimpleInput.ButtonInput();
+        public SimpleInput.ButtonInput button = new();
 
         private void OnEnable()
         {
@@ -24,7 +22,7 @@ namespace NightWatchman
 
         private void OnUpdate()
         {
-            button.value = Input.GetMouseButton(mouseButton);
+            button.value = Input.GetMouseButton(_mouseButton);
         }
     }
 }

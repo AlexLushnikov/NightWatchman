@@ -17,7 +17,7 @@ namespace NightWatchman
 
         public InputHandler(IResourceManager resourceManager)
         {
-            var input = resourceManager.GetOrSpawnPrefab<UserInput>(EPrefabs.Input, true);
+            var input = resourceManager.GetOrSpawnPrefab<UserInput>(EComponents.Input, true);
             SimpleInput.OnUpdate += InputUpdate;
         }
         
